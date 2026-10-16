@@ -180,3 +180,20 @@
 }
 .sound-info { display: grid; gap: 2px; }
 .empty { color: var(--muted); padding: 12px 0; }
+
+/* ---------- Аудио упражнений ---------- */
+.volume-bar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 12px 14px; margin-bottom: 18px;
+}
+.volume-bar input[type="range"] { flex: 1; min-width: 140px; accent-color: var(--accent); }
+.vol-label { font-weight: 600; font-size: 14px; }
+.vol-value { min-width: 44px; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+
+.play-btn {
+  display: inline-flex; align-items: center; gap: 6px; margin: 0 0 10px;
+  border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent);
+  border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.play-btn:hover { filter: brightness(1.1); }

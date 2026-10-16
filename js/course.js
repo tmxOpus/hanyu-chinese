@@ -60,6 +60,11 @@
     }
   }
 
+  // Громкость озвучки упражнений (от 0 до 1), запоминается в браузере
+  function volume() {
+    return typeof state.volume === "number" ? state.volume : 1;
+  }
+
   function speak(text) {
     if (!("speechSynthesis" in window)) return;
     try {
@@ -67,6 +72,7 @@
       const u = new SpeechSynthesisUtterance(text);
       u.lang = "zh-CN";
       u.rate = 0.8;
+      u.volume = volume();
       speechSynthesis.speak(u);
     } catch {
       /* озвучка необязательна */
@@ -75,6 +81,35 @@
 
   const listenButton = (text) =>
     el("button", { class: "icon-btn", type: "button", "aria-label": "Прослушать", text: "🔊", onclick: () => speak(text) });
+
+  // Кнопка запуска звуковой дорожки упражнения
+  const playButton = (text) =>
+    el("button", { class: "play-btn", type: "button", text: "▶ Прослушать", onclick: () => speak(text) });
+
+  // Регулятор громкости для всех упражнений урока
+  function volumeBar() {
+    const percent = Math.round(volume() * 100);
+    const label = el("span", { class: "vol-value", text: `${percent}%` });
+    const input = el("input", {
+      type: "range",
+      min: "0",
+      max: "100",
+      step: "5",
+      value: String(percent),
+      "aria-label": "Громкость озвучки упражнений",
+    });
+    input.addEventListener("input", () => {
+      state.volume = Number(input.value) / 100;
+      label.textContent = `${input.value}%`;
+      saveState();
+    });
+    return el("div", { class: "volume-bar" }, [
+      el("span", { class: "vol-label", text: "🔈 Громкость" }),
+      input,
+      label,
+      el("button", { class: "btn-ghost small", type: "button", text: "▶ Проверить звук", onclick: () => speak("你好") }),
+    ]);
+  }
 
   function shuffle(list) {
     const copy = [...list];
@@ -339,6 +374,7 @@
   // ---------- Упражнения ----------
   function practiceView(les) {
     const wrap = el("div", { class: "exercises" });
+    wrap.append(volumeBar());
     const doneSet = new Set(state.done[les.id] || []);
 
     // Звуки и иероглифы: вопросы с выбором, генерируются из таблицы или из иероглифов урока
@@ -429,7 +465,7 @@
       })
     );
     const head = [el("div", { class: "q", text: `${i + 1}. ${q.q}` })];
-    if (q.speak) head.push(listenButton(q.speak));
+    if (q.speak) head.push(playButton(q.speak));
     return el("section", { class: "check-q" }, [...head, el("div", { class: "opts" }, buttons)]);
   }
 
@@ -534,6 +570,7 @@
       el("div", { class: "ex-prompt", text: `${index + 1}. ${sentence.ru}` }),
       answerBox,
       bankBox,
+      playButton(sentence.zh.join("")),
       el("div", { class: "ex-actions" }, [check, showBtn, msg]),
       reveal
     );
