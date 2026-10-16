@@ -444,11 +444,29 @@
       .slice(0, MAX_QUERY_LENGTH);
   }
 
+  // Пасхалка: при поиске имени «Кира» поднимаются сердечки
+  const HEART_NAMES = ["кира", "kira"];
+  function floatHearts() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const hearts = ["💖", "💕", "💗", "❤️"];
+    for (let i = 0; i < 26; i++) {
+      const heart = document.createElement("span");
+      heart.className = "heart";
+      heart.textContent = hearts[i % hearts.length];
+      heart.style.left = `${Math.random() * 100}%`;
+      heart.style.animationDelay = `${Math.random() * 1.2}s`;
+      heart.style.fontSize = `${14 + Math.random() * 18}px`;
+      document.body.append(heart);
+      heart.addEventListener("animationend", () => heart.remove());
+    }
+  }
+
   async function runSearch(raw) {
     const q = cleanQuery(raw);
     if (!q) return;
     input.value = q;
     const id = ++searchId;
+    if (HEART_NAMES.includes(normRu(q).replace(/\s+/g, ""))) floatHearts();
 
     const url = new URL(location.href);
     url.searchParams.set("q", q);
