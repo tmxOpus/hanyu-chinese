@@ -75,6 +75,7 @@
 .gram-card p { margin: 0 0 12px; line-height: 1.6; color: var(--ink); }
 .example { display: grid; gap: 2px; padding: 10px 12px; border-radius: 10px; background: var(--bg-2); margin-top: 8px; }
 .example .zh { font-family: "Noto Sans SC", sans-serif; font-size: 17px; }
+.example .py { font-size: 13px; font-weight: 500; color: var(--accent); }
 .example .ru { font-size: 14px; color: var(--muted); }
 
 /* ---------- Упражнения: сборка предложений ---------- */
@@ -90,16 +91,18 @@
 }
 .answer { margin-bottom: 10px; }
 .tok {
-  font-family: "Noto Sans SC", sans-serif; font-size: 18px; padding: 6px 12px;
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  font-family: "Noto Sans SC", sans-serif; font-size: 18px; line-height: 1.2; padding: 6px 12px;
   border-radius: 10px; border: 1px solid var(--line); background: var(--card-2); color: var(--ink); cursor: pointer;
 }
+.tok-py { font-family: "Inter", sans-serif; font-size: 12px; font-weight: 500; color: var(--accent); }
 .tok:hover { border-color: var(--accent); }
 .ex-actions { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
 .ex-actions .btn-primary { padding: 9px 18px; font-size: 14px; }
 .msg { font-size: 14px; color: var(--muted); }
 .msg.ok { color: var(--accent); font-weight: 600; }
 .msg.bad { color: #ff8787; }
-.reveal { font-family: "Noto Sans SC", sans-serif; font-size: 17px; color: var(--accent); }
+.reveal { font-family: "Noto Sans SC", sans-serif; font-size: 17px; color: var(--accent); white-space: pre-line; }
 
 /* ---------- Контрольная ---------- */
 .check-q { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; }

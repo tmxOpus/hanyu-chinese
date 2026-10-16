@@ -10,6 +10,9 @@
     ["practice", "Упражнения"],
   ];
 
+  // Транскрипция (пиньинь) показывается в грамматике и упражнениях первых 20 уроков
+  const PINYIN_LESSONS = 20;
+
   const lessons = () => window.COURSE_LESSONS || [];
   const checkpoints = () => window.COURSE_CHECKPOINTS || [];
 
@@ -53,7 +56,10 @@
   function pinyinOf(text) {
     if (!window.pinyinPro) return "";
     try {
-      return window.pinyinPro.pinyin(text, { toneType: "mark" });
+      // Убираем пробел перед знаками препинания: «sān diǎn 。» → «sān diǎn。»
+      return window.pinyinPro
+        .pinyin(text, { toneType: "mark" })
+        .replace(/\s+([。，、！？；：,.!?;:])/g, "$1");
     } catch {
       return "";
     }
@@ -217,6 +223,7 @@
           ...g.examples.map(([zh, ru]) =>
             el("div", { class: "example" }, [
               el("div", { class: "zh", lang: "zh-CN", text: zh }),
+              les.id <= PINYIN_LESSONS ? el("div", { class: "py", text: pinyinOf(zh) }) : null,
               el("div", { class: "ru", text: ru }),
             ])
           ),
@@ -237,12 +244,22 @@
     return el(
       "div",
       { class: "exercises" },
-      les.sentences.map((s, i) => sentenceExercise(i, s, doneSet.has(i), () => onSolved(i)))
+      les.sentences.map((s, i) =>
+        sentenceExercise(i, s, doneSet.has(i), () => onSolved(i), les.id <= PINYIN_LESSONS)
+      )
     );
   }
 
+  // Содержимое слова-кнопки: иероглифы и, если нужно, транскрипция под ними
+  function tokContent(text, showPy) {
+    return [
+      el("span", { class: "tok-zh", text }),
+      showPy ? el("span", { class: "tok-py", text: pinyinOf(text) }) : null,
+    ];
+  }
+
   // Сборка предложения. onSolved вызывается один раз, когда предложение собрано верно.
-  function sentenceExercise(index, sentence, isDone, onSolved) {
+  function sentenceExercise(index, sentence, isDone, onSolved, showPy = false) {
     const bank = shuffle(sentence.zh.map((t, j) => ({ t, j })));
     const answer = [];
     const answerBox = el("div", { class: "answer" });
@@ -258,14 +275,13 @@
           el("button", {
             class: "tok",
             type: "button",
-            text: item.t,
             onclick: () => {
               if (solved) return;
               answer.splice(answer.indexOf(item), 1);
               bank.push(item);
               redraw();
             },
-          })
+          }, tokContent(item.t, showPy))
         )
       );
       bankBox.replaceChildren(
@@ -273,14 +289,13 @@
           el("button", {
             class: "tok",
             type: "button",
-            text: item.t,
             onclick: () => {
               if (solved) return;
               bank.splice(bank.indexOf(item), 1);
               answer.push(item);
               redraw();
             },
-          })
+          }, tokContent(item.t, showPy))
         )
       );
     }
@@ -314,7 +329,8 @@
       type: "button",
       text: "Показать ответ",
       onclick: () => {
-        reveal.textContent = sentence.zh.join("");
+        const full = sentence.zh.join("");
+        reveal.textContent = showPy ? `${full}\n${pinyinOf(full)}` : full;
       },
     });
 
