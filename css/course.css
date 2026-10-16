@@ -1,0 +1,134 @@
+/* Раздел «Курс» — дополняет style.css */
+
+.site-nav { display: flex; gap: 18px; font-size: 14px; }
+.site-nav a { color: var(--muted); text-decoration: none; padding: 6px 2px; border-bottom: 2px solid transparent; }
+.site-nav a:hover { color: var(--ink); }
+.site-nav a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; }
+
+.course { padding: 24px 0 8px; }
+.course-title { font-size: clamp(24px, 4vw, 32px); margin: 8px 0 18px; text-align: left; letter-spacing: -.3px; }
+
+.back { color: var(--muted); text-decoration: none; font-size: 14px; }
+.back:hover { color: var(--accent); }
+
+/* ---------- Список уроков ---------- */
+.lesson-list { display: grid; gap: 12px; }
+
+.lesson-card {
+  display: flex; gap: 16px; align-items: center;
+  padding: 18px 20px; border-radius: var(--radius);
+  background: var(--card); border: 1px solid var(--line);
+  color: var(--ink); text-decoration: none; transition: border-color .2s, transform .15s;
+}
+.lesson-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+.lesson-num {
+  flex: none; width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center; font-weight: 700; font-size: 18px;
+  background: var(--accent-soft); color: var(--accent);
+}
+.lesson-body h2 { margin: 0 0 4px; font-size: 18px; }
+.lesson-intro { margin: 0 0 6px; color: var(--muted); font-size: 14px; }
+.lesson-meta { font-size: 12px; color: var(--muted); }
+
+.lesson-card.checkpoint { border-style: dashed; }
+.lesson-card.checkpoint .lesson-num { background: transparent; border: 1px dashed var(--accent); font-size: 14px; }
+.lesson-card.checkpoint .score { color: var(--accent); font-weight: 600; }
+
+/* ---------- Вкладки урока ---------- */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.tab {
+  padding: 10px 14px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: 14px;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---------- Слова ---------- */
+.word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.word {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px; display: grid; gap: 4px; position: relative;
+}
+.word-zh-c { font-family: "Noto Sans SC", sans-serif; font-size: 26px; line-height: 1.2; }
+.word-py { font-size: 14px; font-weight: 600; }
+.word-ru { font-size: 14px; color: var(--muted); }
+.icon-btn {
+  position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%;
+  border: 0; background: var(--accent-soft); cursor: pointer; font-size: 14px;
+}
+
+/* ---------- Текст ---------- */
+.dialog { display: grid; gap: 10px; }
+.line {
+  display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: start;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
+}
+.speaker {
+  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--card-2); color: var(--accent); font-weight: 700; font-size: 14px;
+}
+.line-zh { font-family: "Noto Sans SC", sans-serif; font-size: 19px; line-height: 1.5; }
+.line-py { font-size: 13px; color: var(--accent); margin-top: 2px; }
+.line-ru { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.line .icon-btn { position: static; }
+
+/* ---------- Грамматика ---------- */
+.gram { display: grid; gap: 14px; }
+.gram-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.gram-card h2 { margin: 0 0 8px; font-size: 17px; }
+.gram-card p { margin: 0 0 12px; line-height: 1.6; color: var(--ink); }
+.example { display: grid; gap: 2px; padding: 10px 12px; border-radius: 10px; background: var(--bg-2); margin-top: 8px; }
+.example .zh { font-family: "Noto Sans SC", sans-serif; font-size: 17px; }
+.example .ru { font-size: 14px; color: var(--muted); }
+
+/* ---------- Упражнения: сборка предложений ---------- */
+.exercises { display: grid; gap: 14px; }
+.ex {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px;
+}
+.ex.done { border-color: var(--accent); }
+.ex-prompt { font-weight: 600; margin-bottom: 10px; }
+.answer, .bank {
+  min-height: 52px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  padding: 10px; border-radius: 12px; background: var(--bg-2); border: 1px dashed var(--line);
+}
+.answer { margin-bottom: 10px; }
+.tok {
+  font-family: "Noto Sans SC", sans-serif; font-size: 18px; padding: 6px 12px;
+  border-radius: 10px; border: 1px solid var(--line); background: var(--card-2); color: var(--ink); cursor: pointer;
+}
+.tok:hover { border-color: var(--accent); }
+.ex-actions { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.ex-actions .btn-primary { padding: 9px 18px; font-size: 14px; }
+.msg { font-size: 14px; color: var(--muted); }
+.msg.ok { color: var(--accent); font-weight: 600; }
+.msg.bad { color: #ff8787; }
+.reveal { font-family: "Noto Sans SC", sans-serif; font-size: 17px; color: var(--accent); }
+
+/* ---------- Контрольная ---------- */
+.check-q { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; }
+.check-q .q { font-weight: 600; margin-bottom: 12px; }
+.opts { display: grid; gap: 8px; }
+.opt {
+  text-align: left; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--bg-2); color: var(--ink); cursor: pointer; font-family: "Noto Sans SC", sans-serif; font-size: 16px;
+}
+.opt:hover { border-color: var(--accent); }
+.opt.right { border-color: var(--accent); background: var(--accent-soft); }
+.opt.wrong { border-color: #ff8787; }
+.opt:disabled { cursor: default; }
+.result-box {
+  text-align: center; padding: 28px; border-radius: var(--radius);
+  background: var(--card); border: 1px solid var(--accent); margin-top: 8px;
+}
+.result-box .big { font-size: 40px; font-weight: 700; color: var(--accent); }
+
+@media (max-width: 560px) {
+  .site-nav { gap: 14px; }
+  .line { grid-template-columns: 30px 1fr; }
+  .line .icon-btn { grid-column: 2; justify-self: start; }
+  .speaker { width: 30px; height: 30px; }
+}
