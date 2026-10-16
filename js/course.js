@@ -1,28 +1,24 @@
 (() => {
-  // Раздел «Курс»: список уроков, уроки (слова, тексты, грамматика, упражнения) и контрольные.
+  // Курс «от звуков к иероглифам»: звуки, уроки с иероглифами, грамматика, упражнения и контрольные.
   const view = document.getElementById("view");
   const KEY = "hanyu.course";
   const PUNCT = /[，。！？、；：,.!?;:“”"'「」（）()\s]/g;
-  const TABS = [
-    ["words", "Слова"],
-    ["text", "Текст"],
-    ["grammar", "Грамматика"],
-    ["practice", "Упражнения"],
+  const HAN = /[㐀-䶿一-鿿]/;
+  const CHAR_DATA_SOURCES = [
+    "https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/",
+    "https://unpkg.com/hanzi-writer-data@2.0/",
   ];
-
-  // Транскрипция (пиньинь) показывается в грамматике и упражнениях первых 20 уроков
-  const PINYIN_LESSONS = 20;
 
   const lessons = () => window.COURSE_LESSONS || [];
   const checkpoints = () => window.COURSE_CHECKPOINTS || [];
 
-  // ---------- Хранилище прогресса (только в браузере этого пользователя) ----------
+  // ---------- Прогресс (только в браузере пользователя) ----------
   function loadState() {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY));
       if (saved && saved.done && saved.checks) return saved;
     } catch {
-      /* нет доступа к хранилищу — начинаем заново */
+      /* нет доступа к хранилищу */
     }
     return { done: {}, checks: {} };
   }
@@ -31,7 +27,7 @@
     try {
       localStorage.setItem(KEY, JSON.stringify(state));
     } catch {
-      /* прогресс не сохранится, но курс работает */
+      /* прогресс не сохранится, курс работает */
     }
   }
 
@@ -56,7 +52,6 @@
   function pinyinOf(text) {
     if (!window.pinyinPro) return "";
     try {
-      // Убираем пробел перед знаками препинания: «sān diǎn 。» → «sān diǎn。»
       return window.pinyinPro
         .pinyin(text, { toneType: "mark" })
         .replace(/\s+([。，、！？；：,.!?;:])/g, "$1");
@@ -71,7 +66,7 @@
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = "zh-CN";
-      u.rate = 0.85;
+      u.rate = 0.8;
       speechSynthesis.speak(u);
     } catch {
       /* озвучка необязательна */
@@ -90,39 +85,111 @@
     return copy;
   }
 
-  function scoreFor(lesson) {
-    return (state.done[lesson.id] || []).length;
+  // Короткий перевод для карточек: до первой запятой или точки с запятой
+  const shortRu = (ru) => ru.split(/[,;]/)[0].trim();
+
+  function lessonById(id) {
+    return lessons().find((l) => l.id === id);
   }
 
   function checkpointFor(lessonId) {
-    return checkpoints().find((c) => Math.max(...c.after) === lessonId);
+    return checkpoints().find((c) => c.afterId === lessonId);
+  }
+
+  // ---------- Порядок черт иероглифа ----------
+  function loadCharData(ch, onLoad, onError) {
+    const local = window.STROKE_DATA && window.STROKE_DATA[ch];
+    if (local) return onLoad(local);
+    let i = 0;
+    const tryNext = () => {
+      if (i >= CHAR_DATA_SOURCES.length) return onError(new Error("no char data"));
+      const url = CHAR_DATA_SOURCES[i++] + ch + ".json";
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error("http " + res.status);
+          return res.json();
+        })
+        .then(onLoad)
+        .catch(tryNext);
+    };
+    tryNext();
+  }
+
+  function strokeColors() {
+    return { strokeColor: "#e6f2f5", outlineColor: "#1f3b5a", radicalColor: "#2dd4bf" };
+  }
+
+  // Кнопка «Порядок черт»: создаёт анимацию иероглифа по первому нажатию
+  function strokeBox(ch) {
+    const stage = el("div", { class: "stroke-stage" });
+    const box = el("div", { class: "stroke-box" });
+    let writer = null;
+    const button = el("button", {
+      class: "btn-ghost small",
+      type: "button",
+      text: "✍ Черты",
+      onclick: () => {
+        if (!window.HanziWriter) {
+          stage.textContent = "Библиотека анимации не загрузилась";
+          return;
+        }
+        if (writer) return writer.animateCharacter();
+        try {
+          writer = window.HanziWriter.create(stage, ch, {
+            width: 120,
+            height: 120,
+            padding: 8,
+            showOutline: true,
+            strokeAnimationSpeed: 1,
+            delayBetweenStrokes: 250,
+            ...strokeColors(),
+            charDataLoader: loadCharData,
+            onLoadCharDataError: () => {
+              stage.replaceChildren(el("span", { class: "tile-error", text: "нет данных для черт" }));
+              writer = null;
+            },
+          });
+          writer.animateCharacter();
+        } catch {
+          stage.textContent = "Не удалось показать черты";
+        }
+      },
+    });
+    box.append(button, stage);
+    return box;
   }
 
   // ---------- Главная курса ----------
   function renderHome() {
     const cards = [];
     for (const les of lessons()) {
+      const done = (state.done[les.id] || []).length;
+      const total = (les.sentences || []).length || (les.exercises || []).length;
+      const meta =
+        les.kind === "phonetics"
+          ? `звуки · упражнений выполнено ${done}/${total}`
+          : `${les.chars.length} иероглифов · ${les.words.length} слов · упражнений ${done}/${total}`;
       cards.push(
         el("a", { class: "lesson-card", href: `#/lesson/${les.id}` }, [
-          el("div", { class: "lesson-num", text: String(les.id) }),
+          el("div", { class: "lesson-num", text: les.kind === "phonetics" ? "🔤" : les.id }),
           el("div", { class: "lesson-body" }, [
             el("h2", { text: les.title }),
             el("p", { class: "lesson-intro", text: les.intro }),
-            el("div", {
-              class: "lesson-meta",
-              text: `${les.words.length} слов · упражнений выполнено ${scoreFor(les)}/${les.sentences.length}`,
-            }),
+            el("div", { class: "lesson-meta", text: meta }),
           ]),
         ])
       );
       const cp = checkpointFor(les.id);
       if (cp) cards.push(checkpointCard(cp));
     }
+    const phonetics = lessons().filter((l) => l.kind === "phonetics").length;
+    const charLessons = lessons().filter((l) => l.kind !== "phonetics");
+    const chars = charLessons.reduce((n, l) => n + l.chars.length, 0);
     view.replaceChildren(
       el("h1", { class: "course-title", text: "Курс китайского" }),
       el("p", {
         class: "lesson-meta",
-        text: `Уроков: ${lessons().length} · контрольных: ${checkpoints().length}`,
+        text: `Звуков: ${phonetics} · уроков: ${charLessons.length} · иероглифов: ${chars} · контрольных: ${checkpoints().length}`,
       }),
       el("div", { class: "lesson-list" }, cards)
     );
@@ -143,15 +210,31 @@
   }
 
   // ---------- Урок ----------
-  function renderLesson(id, tab) {
-    const les = lessons().find((l) => l.id === id);
-    if (!les) return renderHome();
-    const current = TABS.some(([k]) => k === tab) ? tab : "words";
+  function tabsFor(les) {
+    if (les.kind === "phonetics") {
+      return [
+        ["sounds", "Звуки"],
+        ["practice", "Упражнения"],
+      ];
+    }
+    return [
+      ["chars", "Иероглифы"],
+      ["words", "Слова"],
+      ["grammar", "Грамматика"],
+      ["practice", "Упражнения"],
+    ];
+  }
 
-    const tabs = el(
+  function renderLesson(id, tab) {
+    const les = lessonById(id);
+    if (!les) return renderHome();
+    const tabs = tabsFor(les);
+    const current = tabs.some(([k]) => k === tab) ? tab : tabs[0][0];
+
+    const nav = el(
       "nav",
       { class: "tabs", "aria-label": "Разделы урока" },
-      TABS.map(([key, label]) =>
+      tabs.map(([key, label]) =>
         el("a", {
           class: "tab" + (key === current ? " active" : ""),
           href: `#/lesson/${les.id}/${key}`,
@@ -161,18 +244,36 @@
       )
     );
 
-    const content = {
+    const views = {
+      chars: () => charsView(les),
       words: () => wordsView(les),
-      text: () => textView(les),
-      grammar: () => grammarView(les),
+      grammar: () => grammarView(les.grammar || []),
+      sounds: () => soundsView(les),
       practice: () => practiceView(les),
-    }[current]();
+    };
 
     view.replaceChildren(
       el("a", { class: "back", href: "#/", text: "← Все уроки" }),
-      el("h1", { class: "course-title", text: `Урок ${les.id}. ${les.title}` }),
-      tabs,
-      content
+      el("h1", { class: "course-title", text: les.title }),
+      el("p", { class: "lesson-meta", text: les.intro }),
+      nav,
+      views[current]()
+    );
+  }
+
+  // Иероглифы урока: крупно, пиньинь, перевод, озвучка и порядок черт
+  function charsView(les) {
+    return el(
+      "div",
+      { class: "char-grid" },
+      les.chars.map(([ch, py, ru]) =>
+        el("div", { class: "char-card" }, [
+          el("div", { class: "char-glyph", lang: "zh-CN", text: ch }),
+          el("div", { class: "char-py", text: py }),
+          el("div", { class: "char-ru", text: ru }),
+          el("div", { class: "char-actions" }, [listenButton(ch), strokeBox(ch)]),
+        ])
+      )
     );
   }
 
@@ -191,39 +292,21 @@
     );
   }
 
-  function textView(les) {
-    return el("div", {}, [
-      el("h2", { class: "section-title", text: les.text.title }),
-      el(
-        "div",
-        { class: "dialog" },
-        les.text.lines.map(([speaker, zh, ru]) =>
-          el("div", { class: "line" }, [
-            el("div", { class: "speaker", text: speaker }),
-            el("div", {}, [
-              el("div", { class: "line-zh", lang: "zh-CN", text: zh }),
-              el("div", { class: "line-py", text: pinyinOf(zh) }),
-              el("div", { class: "line-ru", text: ru }),
-            ]),
-            listenButton(zh),
-          ])
-        )
-      ),
-    ]);
-  }
-
-  function grammarView(les) {
+  function grammarView(items) {
+    if (!items.length) {
+      return el("p", { class: "empty", text: "В этом уроке новой грамматики нет." });
+    }
     return el(
       "div",
       { class: "gram" },
-      les.grammar.map((g) =>
+      items.map((g) =>
         el("section", { class: "gram-card" }, [
           el("h2", { text: g.title }),
           el("p", { text: g.body }),
           ...g.examples.map(([zh, ru]) =>
             el("div", { class: "example" }, [
               el("div", { class: "zh", lang: "zh-CN", text: zh }),
-              les.id <= PINYIN_LESSONS ? el("div", { class: "py", text: pinyinOf(zh) }) : null,
+              el("div", { class: "py", text: pinyinOf(zh) }),
               el("div", { class: "ru", text: ru }),
             ])
           ),
@@ -232,25 +315,125 @@
     );
   }
 
-  // Упражнение: собрать предложение из слов
-  function practiceView(les) {
-    const doneSet = new Set(state.done[les.id] || []);
-    const onSolved = (i) => {
-      const list = new Set(state.done[les.id] || []);
-      list.add(i);
-      state.done[les.id] = [...list];
-      saveState();
-    };
-    return el(
-      "div",
-      { class: "exercises" },
-      les.sentences.map((s, i) =>
-        sentenceExercise(i, s, doneSet.has(i), () => onSolved(i), les.id <= PINYIN_LESSONS)
-      )
-    );
+  // Звуки: таблица с озвучкой и правила (для уроков звуков)
+  function soundsView(les) {
+    const table = les.table.length
+      ? el(
+          "div",
+          { class: "sound-table" },
+          les.table.map(([ch, py, ru]) =>
+            el("div", { class: "sound-row" }, [
+              el("div", { class: "char-glyph small", lang: "zh-CN", text: ch }),
+              el("div", { class: "sound-info" }, [
+                el("div", { class: "char-py", text: py }),
+                el("div", { class: "char-ru", text: ru }),
+              ]),
+              listenButton(ch),
+            ])
+          )
+        )
+      : null;
+    return el("div", {}, [table, grammarView(les.grammar || [])]);
   }
 
-  // Содержимое слова-кнопки: иероглифы и, если нужно, транскрипция под ними
+  // ---------- Упражнения ----------
+  function practiceView(les) {
+    const wrap = el("div", { class: "exercises" });
+    const doneSet = new Set(state.done[les.id] || []);
+
+    // Звуки и иероглифы: вопросы с выбором, генерируются из таблицы или из иероглифов урока
+    const autoQuestions = les.kind === "phonetics" ? soundQuestions(les) : charQuestions(les);
+    if (autoQuestions.length) {
+      wrap.append(el("h2", { class: "section-title", text: les.kind === "phonetics" ? "Слушайте и выбирайте" : "Узнай иероглиф" }));
+      autoQuestions.forEach((q, i) => wrap.append(choiceQuestion(q, i, () => {})));
+    }
+
+    if (les.exercises && les.exercises.length) {
+      wrap.append(el("h2", { class: "section-title", text: "Выберите правильное чтение" }));
+      les.exercises.forEach((q, i) => wrap.append(choiceQuestion(q, i, () => {})));
+    }
+
+    if (les.sentences && les.sentences.length) {
+      wrap.append(el("h2", { class: "section-title", text: "Соберите предложение" }));
+      const onSolved = (i) => {
+        const list = new Set(state.done[les.id] || []);
+        list.add(i);
+        state.done[les.id] = [...list];
+        saveState();
+      };
+      les.sentences.forEach((s, i) =>
+        wrap.append(sentenceExercise(i, s, doneSet.has(i), () => onSolved(i), true))
+      );
+    }
+    return wrap;
+  }
+
+  // Для урока с иероглифами: 6 вопросов «какой иероглиф» и «как читается»
+  function charQuestions(les) {
+    const picks = shuffle(les.chars).slice(0, Math.min(6, les.chars.length));
+    const pool = les.chars;
+    return picks.map(([ch, py, ru], i) => {
+      if (i % 2 === 0) {
+        const others = shuffle(pool.filter((c) => c[0] !== ch)).slice(0, 3).map((c) => c[0]);
+        const options = shuffle([ch, ...others]);
+        return {
+          type: "choice",
+          q: `Какой иероглиф значит «${shortRu(ru)}»?`,
+          options,
+          answer: options.indexOf(ch),
+        };
+      }
+      const others = shuffle(pool.filter((c) => c[1] !== py)).slice(0, 3).map((c) => c[1]);
+      const options = shuffle([py, ...others]);
+      return {
+        type: "choice",
+        q: `Как читается «${ch}»?`,
+        speak: ch,
+        options,
+        answer: options.indexOf(py),
+      };
+    });
+  }
+
+  // Для урока звуков: слушаем иероглиф и выбираем нужную характеристику
+  function soundQuestions(les) {
+    const keys = les.table.map((r) => r[3]);
+    return shuffle(les.table).map(([ch, py, ru, key]) => {
+      const others = shuffle(keys.filter((k) => k !== key)).slice(0, 3);
+      const options = shuffle([key, ...others]);
+      return {
+        type: "choice",
+        q: `Слушайте и выберите ${les.ask}`,
+        speak: ch,
+        options,
+        answer: options.indexOf(key),
+      };
+    });
+  }
+
+  function choiceQuestion(q, i, done) {
+    const buttons = q.options.map((opt, k) =>
+      el("button", {
+        class: "opt",
+        type: "button",
+        text: opt,
+        onclick: (e) => {
+          const all = e.currentTarget.parentNode.querySelectorAll(".opt");
+          all.forEach((b, n) => {
+            b.disabled = true;
+            if (n === q.answer) b.classList.add("right");
+          });
+          if (k !== q.answer) e.currentTarget.classList.add("wrong");
+          done(k === q.answer);
+        },
+      })
+    );
+    const head = [el("div", { class: "q", text: `${i + 1}. ${q.q}` })];
+    if (q.speak) head.push(listenButton(q.speak));
+    return el("section", { class: "check-q" }, [...head, el("div", { class: "opts" }, buttons)]);
+  }
+
+  // Сборка предложения. onSolved вызывается один раз, когда предложение собрано верно.
   function tokContent(text, showPy) {
     return [
       el("span", { class: "tok-zh", text }),
@@ -258,7 +441,6 @@
     ];
   }
 
-  // Сборка предложения. onSolved вызывается один раз, когда предложение собрано верно.
   function sentenceExercise(index, sentence, isDone, onSolved, showPy = false) {
     const bank = shuffle(sentence.zh.map((t, j) => ({ t, j })));
     const answer = [];
@@ -272,30 +454,38 @@
     function redraw() {
       answerBox.replaceChildren(
         ...answer.map((item) =>
-          el("button", {
-            class: "tok",
-            type: "button",
-            onclick: () => {
-              if (solved) return;
-              answer.splice(answer.indexOf(item), 1);
-              bank.push(item);
-              redraw();
+          el(
+            "button",
+            {
+              class: "tok",
+              type: "button",
+              onclick: () => {
+                if (solved) return;
+                answer.splice(answer.indexOf(item), 1);
+                bank.push(item);
+                redraw();
+              },
             },
-          }, tokContent(item.t, showPy))
+            tokContent(item.t, showPy)
+          )
         )
       );
       bankBox.replaceChildren(
         ...bank.map((item) =>
-          el("button", {
-            class: "tok",
-            type: "button",
-            onclick: () => {
-              if (solved) return;
-              bank.splice(bank.indexOf(item), 1);
-              answer.push(item);
-              redraw();
+          el(
+            "button",
+            {
+              class: "tok",
+              type: "button",
+              onclick: () => {
+                if (solved) return;
+                bank.splice(bank.indexOf(item), 1);
+                answer.push(item);
+                redraw();
+              },
             },
-          }, tokContent(item.t, showPy))
+            tokContent(item.t, showPy)
+          )
         )
       );
     }
@@ -357,12 +547,7 @@
 
     const results = [];
     const total = cp.questions.length;
-
     const finishBox = el("div", {});
-    const questionNodes = cp.questions.map((q, i) => {
-      if (q.type === "choice") return choiceQuestion(q, i, (ok) => onAnswer(i, ok));
-      return assembleQuestion(q, i, (ok) => onAnswer(i, ok));
-    });
 
     function onAnswer(i, ok) {
       results[i] = ok;
@@ -373,11 +558,16 @@
         finishBox.replaceChildren(
           el("div", { class: "result-box" }, [
             el("div", { class: "big", text: `${score} / ${total}` }),
-            el("p", { text: score === total ? "Отличная работа!" : "Вернитесь к урокам и повторите слова." }),
+            el("p", { text: score === total ? "Отличная работа!" : "Вернитесь к урокам и повторите иероглифы." }),
           ])
         );
       }
     }
+
+    const questionNodes = cp.questions.map((q, i) => {
+      if (q.type === "choice") return choiceQuestion(q, i, (ok) => onAnswer(i, ok));
+      return assembleCard(q, i, (ok) => onAnswer(i, ok));
+    });
 
     view.replaceChildren(
       el("a", { class: "back", href: "#/", text: "← Все уроки" }),
@@ -387,33 +577,8 @@
     );
   }
 
-  function choiceQuestion(q, i, done) {
-    const buttons = q.options.map((opt, k) =>
-      el("button", {
-        class: "opt",
-        type: "button",
-        text: opt,
-        onclick: (e) => {
-          const all = e.currentTarget.parentNode.querySelectorAll(".opt");
-          all.forEach((b, n) => {
-            b.disabled = true;
-            if (n === q.answer) b.classList.add("right");
-          });
-          if (k !== q.answer) e.currentTarget.classList.add("wrong");
-          done(k === q.answer);
-        },
-      })
-    );
-    return el("section", { class: "check-q" }, [
-      el("div", { class: "q", text: `${i + 1}. ${q.q}` }),
-      el("div", { class: "opts" }, buttons),
-    ]);
-  }
-
-  // Задание на сборку в контрольной: засчитываем, когда предложение собрано верно.
-  // В прогресс урока ничего не пишем.
-  function assembleQuestion(q, i, done) {
-    const ex = sentenceExercise(i, { ru: q.ru, zh: q.zh }, false, () => done(true));
+  function assembleCard(q, i, done) {
+    const ex = sentenceExercise(i, { ru: q.ru, zh: q.zh }, false, () => done(true), false);
     ex.classList.add("check-q");
     return ex;
   }
@@ -421,8 +586,8 @@
   // ---------- Маршрутизация ----------
   function route() {
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-    if (parts[0] === "lesson" && parts[1]) return renderLesson(Number(parts[1]), parts[2]);
-    if (parts[0] === "check" && parts[1]) return renderCheck(Number(parts[1]));
+    if (parts[0] === "lesson" && parts[1]) return renderLesson(parts[1], parts[2]);
+    if (parts[0] === "check" && parts[1]) return renderCheck(parts[1]);
     renderHome();
   }
 

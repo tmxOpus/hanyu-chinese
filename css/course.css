@@ -151,3 +151,32 @@
   .line .icon-btn { grid-column: 2; justify-self: start; }
   .speaker { width: 30px; height: 30px; }
 }
+
+/* ---------- Иероглифы урока ---------- */
+.char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.char-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+  padding: 14px; display: grid; justify-items: center; gap: 4px; text-align: center;
+}
+.char-glyph {
+  font-family: "Noto Sans SC", sans-serif; font-size: 52px; line-height: 1.1; color: var(--ink);
+}
+.char-glyph.small { font-size: 40px; width: 56px; text-align: center; }
+.char-py { font-size: 15px; font-weight: 600; color: var(--accent); }
+.char-ru { font-size: 13px; color: var(--muted); min-height: 2.6em; }
+.char-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.char-actions .icon-btn { position: static; }
+
+.stroke-box { display: grid; justify-items: center; gap: 6px; }
+.stroke-stage { min-height: 0; }
+.stroke-stage:empty { display: none; }
+.btn-ghost.small { padding: 6px 10px; font-size: 13px; }
+
+/* ---------- Звуки ---------- */
+.sound-table { display: grid; gap: 10px; margin-bottom: 18px; }
+.sound-row {
+  display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px;
+}
+.sound-info { display: grid; gap: 2px; }
+.empty { color: var(--muted); padding: 12px 0; }
