@@ -88,11 +88,17 @@ button, input { font: inherit; }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
 
-/* Кнопка «Начать изучение» внизу главной: градиент, свечение и звёздочки */
+/* Кнопка «Начать изучение» внизу главной: градиент, пульсирующее свечение и звёздочки */
 .cta {
   display: flex;
   justify-content: center;
   padding: 36px 0 8px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 .btn-hero {
@@ -110,7 +116,23 @@ button, input { font: inherit; }
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, .12) inset,
     0 14px 36px -10px rgba(45, 212, 191, .55);
-  transition: transform .2s ease, box-shadow .2s ease;
+  animation: pulse 2.4s ease-in-out infinite;
+  transition: transform .2s ease;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, .12) inset,
+      0 0 0 0 rgba(45, 212, 191, .55),
+      0 14px 36px -10px rgba(45, 212, 191, .55);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, .12) inset,
+      0 0 0 14px rgba(45, 212, 191, 0),
+      0 18px 46px -8px rgba(45, 212, 191, .9);
+  }
 }
 .btn-hero::before {
   /* блик, проходящий по кнопке */
@@ -149,8 +171,8 @@ button, input { font: inherit; }
 .btn-hero .s5 { top: 50%; left: -14px; font-size: 11px; animation-delay: .8s; }
 
 @keyframes twinkle {
-  0%, 100% { opacity: .15; transform: scale(.4) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.15) rotate(45deg); }
+  0%, 100% { opacity: .35; transform: scale(.6) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(45deg); }
 }
 
 @keyframes shine {
@@ -190,7 +212,7 @@ button, input { font: inherit; }
 }
 
 /* ---------- Поиск ---------- */
-.hero { padding: 36px 0 8px; text-align: center; }
+.hero { padding: 72px 0 8px; text-align: center; }
 
 h1 {
   margin: 0 0 22px;

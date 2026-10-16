@@ -114,6 +114,10 @@
     }
     view.replaceChildren(
       el("h1", { class: "course-title", text: "Курс китайского" }),
+      el("p", {
+        class: "lesson-meta",
+        text: `Уроков: ${lessons().length} · контрольных: ${checkpoints().length}`,
+      }),
       el("div", { class: "lesson-list" }, cards)
     );
   }
