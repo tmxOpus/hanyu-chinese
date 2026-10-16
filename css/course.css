@@ -6,6 +6,19 @@
 .back { color: var(--muted); text-decoration: none; font-size: 14px; }
 .back:hover { color: var(--accent); }
 
+/* ---------- Кнопка «Правила языка» ---------- */
+.rules-link {
+  display: flex; flex-direction: column; gap: 2px; align-items: flex-start;
+  margin: 0 0 18px; padding: 14px 20px; border-radius: var(--radius);
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  color: var(--ink); text-decoration: none; font-weight: 700; font-size: 16px;
+  transition: transform .15s ease, filter .2s;
+}
+.rules-link:hover { transform: translateY(-1px); filter: brightness(1.1); }
+.rules-link-sub { font-size: 13px; font-weight: 400; color: var(--muted); }
+
+.rules-section { margin: 30px 0 12px; }
+
 /* ---------- Список уроков ---------- */
 .lesson-list { display: grid; gap: 12px; }
 
