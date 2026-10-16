@@ -124,10 +124,6 @@
         class: "lesson-meta",
         text: `Уроков: ${lessons().length} · контрольных: ${checkpoints().length}`,
       }),
-      el("a", { class: "rules-link", href: "rules.html" }, [
-        el("span", { text: "Правила языка" }),
-        el("span", { class: "rules-link-sub", text: "орфография, пунктуация, предложения" }),
-      ]),
       el("div", { class: "lesson-list" }, cards)
     );
   }
