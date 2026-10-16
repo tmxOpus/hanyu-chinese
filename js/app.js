@@ -129,7 +129,15 @@
       encodeURIComponent(q) +
       "&langpair=" +
       encodeURIComponent(langpair);
-    const res = await fetch(url);
+    // Ограничиваем ожидание сети, чтобы зависший запрос не блокировал интерфейс
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    let res;
+    try {
+      res = await fetch(url, { signal: controller.signal, referrerPolicy: "no-referrer" });
+    } finally {
+      clearTimeout(timer);
+    }
     if (!res.ok) throw new Error("http " + res.status);
     const json = await res.json();
     if (json.responseStatus !== 200) throw new Error("api");
@@ -439,8 +447,18 @@
   }
 
   // ---------- Главный сценарий ----------
+  // Убираем управляющие символы и обрезаем длину: длинный ввод не уходит во внешний сервис
+  const MAX_QUERY_LENGTH = 100;
+  function cleanQuery(raw) {
+    return String(raw)
+      .replace(/[\u0000-\u001f\u007f]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, MAX_QUERY_LENGTH);
+  }
+
   async function runSearch(raw) {
-    const q = raw.trim();
+    const q = cleanQuery(raw);
     if (!q) return;
     input.value = q;
     const id = ++searchId;
