@@ -4,16 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Правила языка — Hànyǔ</title>
-  <meta name="description" content="Основные правила орфографии пиньиня, пунктуации и построения предложений в китайском языке.">
-  <!-- Политика безопасности: та же, что на остальных страницах -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="description" content="Простые правила китайского языка: пиньинь, знаки препинания и порядок слов в предложении, с примерами и транскрипцией.">
+  <!-- Политика безопасности: скрипты только со своего сайта и с pinyin-pro с CDN -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d9488'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%23e6f2f5' font-family='serif'%3E%E6%B1%89%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=8">
-  <link rel="stylesheet" href="css/course.css?v=8">
+  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/course.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -32,77 +32,96 @@
     <div class="course">
       <a class="back" href="course.html">← К урокам</a>
       <h1 class="course-title">Правила языка</h1>
-      <p class="lesson-meta">Орфография пиньиня, пунктуация и построение предложений. Примеры к каждому правилу.</p>
+      <p class="lesson-meta">Коротко и с примерами. Под каждым китайским примером — пиньинь, то есть как это читается.</p>
 
-      <h2 class="section-title rules-section">Орфография (пиньинь)</h2>
+      <h2 class="section-title rules-section">Термины простыми словами</h2>
       <div class="gram">
         <section class="gram-card">
-          <h2>Слитно и раздельно</h2>
-          <p>Слоги одного многосложного слова пишутся слитно и образуют одно слово: Zhōngguórén, Běijīng. Отдельные слова отделяются пробелом. Частицы (de, le, ma, ne, ba, guo) пишутся отдельно от предыдущего слова.</p>
-          <div class="example"><div class="zh">Zhōngguórén</div><div class="ru">китаец (одно слово, слитно)</div></div>
-          <div class="example"><div class="zh">wǒ xǐhuan Hànyǔ</div><div class="ru">я люблю китайский язык (отдельные слова)</div></div>
+          <h2>Что означают слова на этой странице</h2>
+          <div class="glossary">
+            <div class="term"><b>Иероглиф</b> — один знак китайской письменности, например 学.</div>
+            <div class="term"><b>Пиньинь</b> — запись китайского латинскими буквами, например xué. Так китайское слово можно прочитать.</div>
+            <div class="term"><b>Тон</b> — подъём или спуск голоса на слоге. Всего четыре тона и «нейтральный» (без знака). Знак тона — надстрочный значок над гласной: ā, á, ǎ, à.</div>
+            <div class="term"><b>Слог</b> — одно «звучание» в пиньине: nǐ — один слог, hǎo — второй.</div>
+            <div class="term"><b>Частица</b> — короткое служебное слово, которое задаёт вопрос или показывает, что действие уже произошло: 吗, 呢, 了.</div>
+            <div class="term"><b>Счётное слово</b> — слово между числом (или словом «этот») и существительным. Например, «три книги» — 三本书, где 本 — счётное слово для книг.</div>
+            <div class="term"><b>Подлежащее</b> — тот, кто делает действие (я, он). <b>Сказуемое</b> — что делают (пью, учусь). <b>Дополнение</b> — на что направлено действие (чай, книгу).</div>
+            <div class="term"><b>Обстоятельство</b> — когда или где происходит действие (сегодня, в школе). <b>Определение</b> — какой или чей предмет (красивый, мой).</div>
+            <div class="term"><b>Предлог</b> — слово, которое ставит место или направление: 在 (в, на), 从 (от), 往 (к).</div>
+            <div class="term"><b>Наречие</b> — слово, которое уточняет признак или действие: 很 (очень), 不 (не), 也 (тоже).</div>
+          </div>
+        </section>
+      </div>
+
+      <h2 class="section-title rules-section">Пиньинь (как записывается и читается)</h2>
+      <div class="gram">
+        <section class="gram-card">
+          <h2>Слова пишутся слитно или раздельно</h2>
+          <p>Слоги одного слова, состоящего из нескольких слогов, пишутся вместе: Zhōngguórén (китаец). Отдельные слова пишутся через пробел: wǒ xǐhuan Hànyǔ. Частицы de, le, ma, ne пишутся отдельно.</p>
+          <div class="example"><div class="zh">Zhōngguórén</div><div class="ru">китаец — одно слово, пишется слитно</div></div>
+          <div class="example"><div class="zh">wǒ xǐhuan Hànyǔ</div><div class="ru">я люблю китайский язык — три отдельных слова</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>Где ставится знак тона</h2>
-          <p>Знак тона ставится на главную гласную слога. Приоритет: a, затем o и e, затем i, u или ü. В сочетании iu знак ставится на u (liú), в ui — на i (guì). Если в слоге нейтральный тон, знак не ставится: ma, de.</p>
-          <div class="example"><div class="zh">hǎo</div><div class="ru">хороший (знак на a)</div></div>
+          <h2>Где ставить знак тона</h2>
+          <p>Знак тона ставится над главной гласной слога. Порядок важности: a, потом o или e, потом i, u, ü. В сочетании iu знак над u (liú), в ui — над i (guì). Нейтральный слог знака не имеет: ma, de.</p>
+          <div class="example"><div class="zh">hǎo</div><div class="ru">хороший (знак над a)</div></div>
           <div class="example"><div class="zh">liú · guì</div><div class="ru">течь · дорогой</div></div>
-          <div class="example"><div class="zh">ma</div><div class="ru">частица вопроса (нейтральный тон, без знака)</div></div>
+          <div class="example"><div class="zh">ma</div><div class="ru">частица вопроса (без знака тона)</div></div>
         </section>
 
         <section class="gram-card">
           <h2>Буква ü</h2>
-          <p>После j, q, x и y две точки над u не пишутся: xue, qu, yu. После n и l точки сохраняются: nǚ, lǜ. Эти правила касаются только написания: звучание одинаковое.</p>
+          <p>Буква ü — это звук, похожий на «ю» с губами трубочкой. После j, q, x и y две точки не пишут: xue, qu, yu. После n и l точки остаются: nǚ, lǜ. Меняется только запись, звук одинаковый.</p>
           <div class="example"><div class="zh">xuě</div><div class="ru">снег</div></div>
-          <div class="example"><div class="zh">nǚ</div><div class="ru">женщина (ü сохраняется после n)</div></div>
+          <div class="example"><div class="zh">nǚ</div><div class="ru">женщина</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>Слоги, начинающиеся с гласной</h2>
-          <p>Если слог начинается с гласной, вместо i, u и ü пишем y и w: yī, wǔ, yǔ. Например, yī (один) пишется с y, а не с i.</p>
+          <h2>Слоги, которые начинаются с гласной</h2>
+          <p>Если слог начинается с гласной, вместо i, u и ü пишут y и w: yī, wǔ, yǔ.</p>
           <div class="example"><div class="zh">yī · wǔ · yǔ</div><div class="ru">один · пять · дождь</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>Изменение тона у 不 и 一</h2>
-          <p>不 (bù) перед слогом четвёртого тона произносится и пишется как bú. 一 (yī) перед четвёртым тоном звучит как yí, перед первым, вторым и третьим — как yì. В счёте и в конце фразы остаётся yī. Тоны меняются на слух, а в пиньине часто записываются сразу.</p>
-          <div class="example"><div class="zh">bú qù</div><div class="ru">не иду (не + четвёртый тон)</div></div>
+          <h2>Тон у слов 不 и 一</h2>
+          <p>不 (нет, не) перед слогом четвёртого тона читается как bú. 一 (один) перед четвёртым тоном читается как yí, а перед первым, вторым и третьим тоном — как yì. Отдельно и в счёте остаётся yī.</p>
+          <div class="example"><div class="zh">bú qù</div><div class="ru">не иду</div></div>
           <div class="example"><div class="zh">yí ge · yì běn</div><div class="ru">одна штука · одна книга</div></div>
         </section>
 
         <section class="gram-card">
           <h2>Заглавные буквы</h2>
-          <p>С заглавной буквы пишется первое слово предложения, имена собственные и названия городов и стран. Иероглифы заглавных букв не имеют.</p>
-          <div class="example"><div class="zh">Wáng Míng · Zhōngguó</div><div class="ru">Ван Мин · Китай</div></div>
+          <p>С большой буквы пишут первое слово предложения, имена людей, города и страны. Иероглифы больших букв не имеют.</p>
+          <div class="example"><div class="zh">Wáng Míng · Běijīng</div><div class="ru">Ван Мин · Пекин</div></div>
         </section>
       </div>
 
-      <h2 class="section-title rules-section">Пунктуация</h2>
+      <h2 class="section-title rules-section">Знаки препинания</h2>
       <div class="gram">
         <section class="gram-card">
-          <h2>Китайские знаки препинания</h2>
-          <p>。 — точка в конце предложения; ， — запятая; 、 — перечисление однородных слов; ； — точка с запятой; ： — двоеточие перед прямой речью; ？ — вопрос; ！ — восклицание. Кавычки “ ” и ‘ ’, названия книг и фильмов в 《 》. Перед китайским знаком пробел не ставится.</p>
+          <h2>Китайские знаки</h2>
+          <p>。 — точка в конце предложения. ， — запятая между частями фразы. 、 — запятая между однородными словами, например в списке. ； — точка с запятой. ： — двоеточие перед прямой речью. ？ — вопрос. ！ — восклицание. Кавычки “ ” и ‘ ’. Названия книг и фильмов пишут в 《 》. Перед китайским знаком пробел не ставят.</p>
           <div class="example"><div class="zh">苹果、香蕉和橙子。</div><div class="ru">Яблоки, бананы и апельсины.</div></div>
           <div class="example"><div class="zh">他说：“我明天来。”</div><div class="ru">Он сказал: «Я приду завтра».</div></div>
         </section>
 
         <section class="gram-card">
           <h2>Вопросительный знак</h2>
-          <p>？ ставится в конце любого вопроса: и в вопросе с 吗, и в вопросе с вопросительным словом, и в вопросе с 呢.</p>
+          <p>？ ставят в конце любого вопроса, и когда есть частица 吗, и когда есть слово «что», «кто», «где».</p>
           <div class="example"><div class="zh">你是学生吗？</div><div class="ru">Ты студент?</div></div>
           <div class="example"><div class="zh">你叫什么名字？</div><div class="ru">Как тебя зовут?</div></div>
         </section>
 
         <section class="gram-card">
           <h2>Многоточие и тире</h2>
-          <p>Многоточие в китайском пишется двумя знаками подряд: ……. Тире — двумя знаками ——. Оба знака занимают целую иероглифическую клетку.</p>
+          <p>Многоточие — два знака подряд: ……. Тире — два знака ——. Каждый занимает полную клетку иероглифа.</p>
           <div class="example"><div class="zh">他想了想……</div><div class="ru">Он задумался…</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>Пиньинь и знаки</h2>
-          <p>В транскрипции используем обычные (западные) знаки: . , ? ! — и пробел после каждого знака. Китайские знаки в пиньине не применяются.</p>
+          <h2>В пиньине</h2>
+          <p>В транскрипции используют обычные знаки: точку, запятую, вопросительный и восклицательный знаки. После каждого из них ставят пробел.</p>
           <div class="example"><div class="zh">Nǐ hǎo, Wáng Míng.</div><div class="ru">Здравствуй, Ван Мин.</div></div>
         </section>
       </div>
@@ -110,67 +129,81 @@
       <h2 class="section-title rules-section">Построение предложений</h2>
       <div class="gram">
         <section class="gram-card">
-          <h2>Порядок слов: подлежащее — сказуемое — дополнение</h2>
-          <p>Порядок близок к русскому: 我喝茶 — «я пью чай». Обстоятельства времени и места стоят перед глаголом, а не в конце: 我明天在学校学习.</p>
+          <h2>Порядок слов: кто — что делает — что</h2>
+          <p>Порядок почти как в русском: подлежащее, сказуемое, дополнение. Время и место ставят перед глаголом, а не в конце предложения.</p>
           <div class="example"><div class="zh">我喝茶。</div><div class="ru">Я пью чай.</div></div>
           <div class="example"><div class="zh">我明天去北京。</div><div class="ru">Завтра я еду в Пекин.</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>Определение: 的</h2>
-          <p>Определение (чей, какой) ставится перед определяемым словом. Частица 的 соединяет определение с существительным: 我的书 — «моя книга», 漂亮的花 — «красивый цветок». С названиями родственников и с однословными определениями 的 часто опускают: 我妈妈.</p>
+          <h2>Частица 的 — показывает, чей или какой предмет</h2>
+          <p>Слово, которое описывает предмет (чей, какой), ставят перед существительным. Между ними часто стоит 的. С родственниками 的 часто не нужно: 我妈妈.</p>
           <div class="example"><div class="zh">我的书</div><div class="ru">моя книга</div></div>
           <div class="example"><div class="zh">漂亮的花</div><div class="ru">красивый цветок</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>Глаголы 是, 有, 在</h2>
-          <p>是 — «является» (X — это Y): 我是学生. 有 — «есть, иметь»: 我有一个妹妹. 在 — «находится»: 书在桌子上. «У меня есть» передаём через 有, а не через 是.</p>
-          <div class="example"><div class="zh">我是学生。 · 我有妹妹。 · 书在桌子上。</div><div class="ru">Я студент. · У меня есть сестра. · Книга на столе.</div></div>
+          <h2>Три главных глагола: 是, 有, 在</h2>
+          <p>是 — «быть (являться)»: «я студент». 有 — «иметь, есть»: «у меня есть сестра». 在 — «находиться»: «книга на столе». Частая ошибка: «у меня есть» нельзя сказать через 是.</p>
+          <div class="example"><div class="zh">我是学生。</div><div class="ru">Я студент.</div></div>
+          <div class="example"><div class="zh">我有妹妹。</div><div class="ru">У меня есть младшая сестра.</div></div>
+          <div class="example"><div class="zh">书在桌子上。</div><div class="ru">Книга на столе.</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>Прилагательное в роли сказуемого</h2>
-          <p>Прилагательное-сказуемое не требует 是, но обычно сопровождается наречием 很. Без 很 фраза звучит как сравнение или противопоставление. Отрицание: 不 + прилагательное.</p>
+          <h2>Прилагательное без глагола «быть»</h2>
+          <p>Прилагательное может стоять прямо после подлежащего, но тогда обычно добавляют наречие 很 (очень). Без него фраза звучит как сравнение: «я занят (а вот другие нет)». Отрицание: не + прилагательное.</p>
           <div class="example"><div class="zh">我很忙。</div><div class="ru">Я очень занят.</div></div>
           <div class="example"><div class="zh">这个不贵。</div><div class="ru">Это не дорого.</div></div>
         </section>
 
         <section class="gram-card">
           <h2>Вопросы</h2>
-          <p>Вопрос «да/нет» — с 吗 в конце: 你是老师吗？ Вопрос с вопросительным словом (谁, 什么, 哪儿, 几, 多少, 怎么, 为什么) — без 吗: 你叫什么名字？ Выбор — с 还是: 喝茶还是咖啡？ Вопрос «а ты?» — с 呢: 我很好，你呢？</p>
-          <div class="example"><div class="zh">你喝茶还是咖啡？</div><div class="ru">Ты будешь чай или кофе?</div></div>
-          <div class="example"><div class="zh">我很好，你呢？</div><div class="ru">У меня всё хорошо, а у тебя?</div></div>
+          <ul class="plain">
+            <li><b>Да или нет:</b> ставим частицу 吗 в конце. <span class="zh-inline">你是老师吗？</span></li>
+            <li><b>С вопросительным словом</b> (что, кто, где, сколько, почему): частица не нужна. <span class="zh-inline">你叫什么名字？</span></li>
+            <li><b>Выбор:</b> ставим 还是 (или). <span class="zh-inline">你喝茶还是咖啡？</span></li>
+            <li><b>«А ты?»:</b> ставим частицу 呢. <span class="zh-inline">我很好，你呢？</span></li>
+          </ul>
         </section>
 
         <section class="gram-card">
-          <h2>Отрицание: 不 и 没 (有)</h2>
-          <p>不 — для желания, состояния, привычки и общих действий: 我不喝咖啡. 没 (没有) — для отсутствия и для прошедших действий: 我没去. «Нет» при обладании — только 没有: 我没有钱.</p>
+          <h2>Отрицание: не (不) и нет (没)</h2>
+          <p>不 — для желания, привычки и того, что повторяется: «не пью кофе». 没 (или 没有) — для того, чего нет, и для прошедшего действия: «не был», «не сделал».</p>
           <div class="example"><div class="zh">我不喝咖啡。</div><div class="ru">Я не пью кофе.</div></div>
           <div class="example"><div class="zh">我没去。</div><div class="ru">Я не ходил.</div></div>
+          <div class="example"><div class="zh">我没有钱。</div><div class="ru">У меня нет денег.</div></div>
         </section>
 
         <section class="gram-card">
           <h2>Счётные слова</h2>
-          <p>Между числом (или 这, 那, 几) и существительным ставим счётное слово: 三本书, 这张桌子, 几个人. Перед счётным словом «два» используем 两 (两个人), а не 二.</p>
-          <div class="example"><div class="zh">三本书 · 这张桌子</div><div class="ru">три книги · этот стол</div></div>
+          <p>Между числом (или словами «этот», «какой») и существительным ставят счётное слово. Для книг — 本, для столов — 张, для людей — 个. Число «два» перед счётным словом пишут 两, а не 二.</p>
+          <div class="example"><div class="zh">三本书 · 这张桌子 · 两个人</div><div class="ru">три книги · этот стол · два человека</div></div>
         </section>
 
         <section class="gram-card">
-          <h2>«Много» и «много делать»</h2>
-          <p>Перед существительным «много» — 很多 (很多人). Перед глаголом — 多 (多说, 多吃). 多 после глагола часто означает «больше»: 多吃一点儿.</p>
+          <h2>Слово «много»</h2>
+          <p>Перед существительным — 很多 (много людей: 很多人). Перед глаголом — 多 (много говорить, есть побольше): 多吃一点儿.</p>
           <div class="example"><div class="zh">很多人 · 多吃一点儿</div><div class="ru">много людей · ешьте побольше</div></div>
         </section>
 
         <section class="gram-card">
           <h2>Частые ошибки</h2>
-          <p>Не переводите дословно русские конструкции. Не ставьте 是 перед прилагательным без наречия. Не ставьте глагол в конец предложения: обстоятельства идут перед глаголом. Не путайте 有 (есть) и 在 (находиться) и 是 (является).</p>
-          <div class="example"><div class="zh">我有一个妹妹，不是“我是一个妹妹”。</div><div class="ru">У меня есть сестра (а не «я есть сестра»).</div></div>
+          <ul class="plain">
+            <li>Не переводите русские фразы слово в слово.</li>
+            <li>Не ставьте 是 перед прилагательным без 很.</li>
+            <li>Не ставьте глагол в конец предложения: время и место идут раньше.</li>
+            <li>Не путайте «есть» (有), «находиться» (在) и «являться» (是).</li>
+          </ul>
         </section>
       </div>
     </div>
   </main>
 
-  <footer class="footer">Правила приведены в упрощённом виде для самостоятельного изучения</footer>
+  <footer class="footer">Упрощённое изложение для самостоятельного изучения</footer>
+
+  <!-- Транскрипция к примерам: pinyin-pro с CDN, проверенный по SRI-хэшу -->
+  <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.29.5/dist/index.js" integrity="sha384-xVOc29fEvSd2kiehn/G68i0AUsGb67RS3xxFcicOrdV+aizdO11IQHvq0VEMprf/" crossorigin="anonymous"></script>
+  <script src="js/rules.js?v=2"></script>
 </body>
 </html>
