@@ -160,32 +160,6 @@
   }
 
   // ---------- Анимация иероглифов ----------
-  // Данные черт берём с CDN по очереди: если первый недоступен, пробуем второй
-  const CHAR_DATA_SOURCES = [
-    "https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/",
-    "https://unpkg.com/hanzi-writer-data@2.0/",
-  ];
-
-  function loadCharData(ch, onLoad, onError) {
-    // Сначала локальные данные из js/strokes.js — не зависят от сети
-    const local = window.STROKE_DATA && window.STROKE_DATA[ch];
-    if (local) return onLoad(local);
-
-    let i = 0;
-    const tryNext = () => {
-      if (i >= CHAR_DATA_SOURCES.length) return onError(new Error("no char data"));
-      const url = CHAR_DATA_SOURCES[i++] + ch + ".json";
-      fetch(url)
-        .then((res) => {
-          if (!res.ok) throw new Error("http " + res.status);
-          return res.json();
-        })
-        .then(onLoad)
-        .catch(tryNext);
-    };
-    tryNext();
-  }
-
   function makeTile(ch, syllable) {
     const stage = el("div", { class: "stage", title: "Нажмите, чтобы посмотреть порядок черт" });
     const replayBtn = el("button", {
@@ -226,7 +200,7 @@
           strokeAnimationSpeed: 1,
           delayBetweenStrokes: 280,
           ...strokeColors(),
-          charDataLoader: loadCharData,
+          charDataLoader: window.loadStrokeData,
           onLoadCharDataError: fallback,
         });
       } catch {

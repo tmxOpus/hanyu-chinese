@@ -4,10 +4,6 @@
   const KEY = "hanyu.course";
   const PUNCT = /[，。！？、；：,.!?;:“”"'「」（）()\s]/g;
   const HAN = /[㐀-䶿一-鿿]/;
-  const CHAR_DATA_SOURCES = [
-    "https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/",
-    "https://unpkg.com/hanzi-writer-data@2.0/",
-  ];
 
   const lessons = () => window.COURSE_LESSONS || [];
   const checkpoints = () => window.COURSE_CHECKPOINTS || [];
@@ -131,25 +127,6 @@
     return checkpoints().find((c) => c.afterId === lessonId);
   }
 
-  // ---------- Порядок черт иероглифа ----------
-  function loadCharData(ch, onLoad, onError) {
-    const local = window.STROKE_DATA && window.STROKE_DATA[ch];
-    if (local) return onLoad(local);
-    let i = 0;
-    const tryNext = () => {
-      if (i >= CHAR_DATA_SOURCES.length) return onError(new Error("no char data"));
-      const url = CHAR_DATA_SOURCES[i++] + ch + ".json";
-      fetch(url)
-        .then((res) => {
-          if (!res.ok) throw new Error("http " + res.status);
-          return res.json();
-        })
-        .then(onLoad)
-        .catch(tryNext);
-    };
-    tryNext();
-  }
-
   function strokeColors() {
     return { strokeColor: "#e6f2f5", outlineColor: "#1f3b5a", radicalColor: "#2dd4bf" };
   }
@@ -178,7 +155,7 @@
             strokeAnimationSpeed: 1,
             delayBetweenStrokes: 250,
             ...strokeColors(),
-            charDataLoader: loadCharData,
+            charDataLoader: window.loadStrokeData,
             onLoadCharDataError: () => {
               stage.replaceChildren(el("span", { class: "tile-error", text: "нет данных для черт" }));
               writer = null;
