@@ -4,7 +4,6 @@
   const CYRILLIC = /[а-яё]/i;
   const LATIN_PINYIN = /^[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s'’-]+$/i;
   const HISTORY_KEY = "hanyu.history";
-  const THEME_KEY = "hanyu.theme";
   const MAX_HISTORY = 12;
   const EXAMPLES = ["привет", "你好", "школа", "学习", "nǐ hǎo", "кошка", "пельмени"];
 
@@ -17,7 +16,6 @@
   const historyList = $("#history");
 
   let searchId = 0;      // защита от устаревших ответов сети
-  let lastEntry = null;  // для перерисовки при смене темы
 
   // ---------- Утилиты ----------
   function el(tag, attrs = {}, children = []) {
@@ -68,16 +66,9 @@
     }
   }
 
-  function isDark() {
-    const explicit = document.documentElement.dataset.theme;
-    if (explicit) return explicit === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  }
-
+  // Цвета штрихов в тон интерфейсу: тёмно-синий фон, бирюзовый акцент
   function strokeColors() {
-    return isDark()
-      ? { strokeColor: "#f3ece1", outlineColor: "#3a3229", radicalColor: "#ff8fab" }
-      : { strokeColor: "#1f1b17", outlineColor: "#e6dccd", radicalColor: "#c8102e" };
+    return { strokeColor: "#e6f2f5", outlineColor: "#1f3b5a", radicalColor: "#2dd4bf" };
   }
 
   // ---------- Поиск по словарю ----------
@@ -220,7 +211,7 @@
     const fallback = () => {
       stage.replaceChildren(
         el("span", { class: "tile-error", text: ch }),
-        el("span", { class: "tile-error", text: "анимация недоступна" })
+        el("span", { class: "tile-error", text: "нет анимации" })
       );
       writer = null;
     };
@@ -293,7 +284,6 @@
 
   // ---------- Отрисовка ----------
   function renderResult(entry) {
-    lastEntry = entry;
     const isChinese = HAN.test(entry.zh);
     const chars = Array.from(entry.zh).filter((c) => HAN.test(c));
     let syllables = syllablesFor(entry.zh);
@@ -312,7 +302,7 @@
       class: "btn-ghost speak",
       type: "button",
       "aria-label": "Произнести",
-      text: "🔊 Произнести",
+      text: "🔊",
       onclick: () => speak(entry.zh),
     });
 
@@ -323,8 +313,8 @@
           text: isChinese ? "Китайский → русский" : "Русский → китайский",
         }),
         entry.source === "online"
-          ? el("span", { class: "source online", text: "Автоматический перевод" })
-          : el("span", { class: "source", text: "Из словаря" }),
+          ? el("span", { class: "source online", text: "Автоперевод" })
+          : el("span", { class: "source", text: "Словарь" }),
       ]),
       el("div", { class: "word-row" }, [
         el("div", { class: "word-zh", lang: "zh-CN", text: entry.zh }),
@@ -336,10 +326,7 @@
         el("div", { class: "meaning-text", text: entry.translation }),
       ]),
       entry.source === "online"
-        ? el("p", {
-            class: "note",
-            text: "Перевод получен автоматически — сверьтесь со словарём, если важны оттенки значения.",
-          })
+        ? el("p", { class: "note", text: "Перевод автоматический, сверьтесь со словарём." })
         : null,
       chars.length
         ? el("section", { class: "strokes" }, [
@@ -348,13 +335,13 @@
               el("button", {
                 class: "btn-ghost",
                 type: "button",
-                text: "▶ Показать по порядку",
+                text: "▶ Все черты",
                 onclick: () => playAll(tileNodes),
               }),
             ]),
             window.HanziWriter
               ? tiles
-              : el("p", { class: "note", text: "Анимация недоступна: не загрузилась библиотека Hanzi Writer." }),
+              : el("p", { class: "note", text: "Библиотека анимации не загрузилась." }),
           ])
         : null,
     ]);
@@ -377,7 +364,7 @@
 
   function renderLoading() {
     resultBox.replaceChildren(
-      el("div", { class: "loading" }, [el("span", { class: "spinner" }), el("span", { text: "Ищем перевод…" })])
+      el("div", { class: "loading" }, [el("span", { class: "spinner" }), el("span", { text: "Ищем…" })])
     );
     resultBox.hidden = false;
   }
@@ -389,7 +376,7 @@
       return;
     }
     suggestBox.replaceChildren(
-      el("span", { class: "suggest-label", text: "Похожие слова из словаря" }),
+      el("span", { class: "suggest-label", text: "Похожие" }),
       el(
         "div",
         { class: "chips" },
@@ -481,11 +468,7 @@
     // Латиница (пиньинь) ищется только по словарю — онлайн-перевода для неё нет
     if (!HAN.test(q) && !CYRILLIC.test(q)) {
       if (suggestions.length) resultBox.hidden = true;
-      else
-        renderMessage(
-          "Ничего не нашли",
-          "Пиньинь ищется по словарю. Попробуйте ввести слово по-русски или иероглифами."
-        );
+      else renderMessage("Не найдено", "Введите слово по-русски или иероглифами.");
       return;
     }
 
@@ -497,37 +480,8 @@
       remember(q);
     } catch {
       if (id !== searchId) return;
-      renderMessage(
-        "Перевод не найден",
-        "Проверьте написание или попробуйте другой вариант. Онлайн-перевод доступен не всегда."
-      );
+      renderMessage("Не найдено", "Проверьте написание или попробуйте другое слово.");
     }
-  }
-
-  // ---------- Тема ----------
-  function applyTheme(theme) {
-    if (theme) document.documentElement.dataset.theme = theme;
-    else delete document.documentElement.dataset.theme;
-  }
-
-  function initTheme() {
-    let saved = null;
-    try {
-      saved = localStorage.getItem(THEME_KEY);
-    } catch {
-      /* нет доступа к хранилищу */
-    }
-    applyTheme(saved);
-    $("#themeToggle").addEventListener("click", () => {
-      const next = isDark() ? "light" : "dark";
-      applyTheme(next);
-      try {
-        localStorage.setItem(THEME_KEY, next);
-      } catch {
-        /* ничего страшного */
-      }
-      if (lastEntry) renderResult(lastEntry); // перерисовываем с цветами новой темы
-    });
   }
 
   // ---------- Запуск ----------
@@ -536,7 +490,6 @@
     runSearch(input.value);
   });
 
-  initTheme();
   renderExamples();
   renderHistory();
 

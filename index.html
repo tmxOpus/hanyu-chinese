@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hànyǔ — китайский по словам</title>
-  <meta name="description" content="Введите слово на русском или иероглифами: перевод, пиньинь и анимация порядка черт.">
+  <meta name="description" content="Введите слово на русском или иероглифами: перевод, пиньинь и порядок черт.">
   <!-- Политика безопасности: разрешаем только свои файлы и перечисленные CDN.
        GitHub Pages не даёт менять HTTP-заголовки, поэтому задаём её мета-тегом.
        frame-ancestors (запрет встраивания в iframe) через мета-тег не работает. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c8102e'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%23fff8ec' font-family='serif'%3E%E6%B1%89%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d9488'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%23e6f2f5' font-family='serif'%3E%E6%B1%89%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -22,20 +22,15 @@
       <span class="brand-mark">汉</span>
       <span class="brand-text">Hànyǔ</span>
     </a>
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему" title="Светлая / тёмная тема">
-      <span aria-hidden="true">◐</span>
-    </button>
   </header>
 
   <main class="container">
     <section class="hero">
-      <p class="eyebrow">Словарь · пиньинь · порядок черт</p>
-      <h1>Китайский — <span class="accent">по одному слову</span></h1>
-      <p class="lead">Введите слово на русском, иероглифами или пиньинем — получите перевод, транскрипцию и анимацию написания.</p>
+      <h1>Китайский по словам</h1>
 
       <form class="search" id="searchForm" role="search" autocomplete="off">
-        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <label class="visually-hidden" for="query">Слово на русском, иероглифами или пиньинем</label>
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <input id="query" type="search" name="q" placeholder="привет, 你好 или nǐ hǎo" spellcheck="false">
         <button type="submit" class="btn-primary">Найти</button>
       </form>
@@ -47,14 +42,13 @@
     <section class="result" id="result" aria-live="polite" hidden></section>
 
     <section class="history" id="historyBox" hidden>
-      <h2 class="section-title">Недавние запросы</h2>
+      <h2 class="section-title">Недавние</h2>
       <div class="chips" id="history"></div>
     </section>
   </main>
 
   <footer class="footer">
-    Словарь — стартовый набор частых слов. Слова вне словаря переводятся онлайн (MyMemory) и помечаются как автоматический перевод.
-    Анимация — <a href="https://hanziwriter.org" target="_blank" rel="noopener">Hanzi Writer</a>.
+    Онлайн-перевод слов вне словаря: MyMemory · Анимация: Hanzi Writer
   </footer>
 
   <!-- integrity: браузер проверит, что файл с CDN не подменён -->
