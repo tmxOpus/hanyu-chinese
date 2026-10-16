@@ -1,12 +1,5 @@
 /* Раздел «Курс» — дополняет style.css */
 
-.site-nav { display: flex; gap: 18px; font-size: 14px; }
-.site-nav a { color: var(--muted); text-decoration: none; padding: 6px 2px; border-bottom: 2px solid transparent; }
-.site-nav a:hover { color: var(--ink); }
-.site-nav a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
-
-.topbar { display: flex; align-items: center; justify-content: space-between; }
-
 .course { padding: 24px 0 8px; }
 .course-title { font-size: clamp(24px, 4vw, 32px); margin: 8px 0 18px; text-align: left; letter-spacing: -.3px; }
 
