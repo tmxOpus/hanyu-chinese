@@ -513,6 +513,16 @@ h1 {
 .history { margin: 30px 0 0; }
 .history .chips { justify-content: flex-start; margin-top: 10px; }
 
+.footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-size: 12px; }
+.footer a:hover { color: var(--accent); }
+
+.search-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
 .footer {
   width: 100%;
   max-width: 960px;

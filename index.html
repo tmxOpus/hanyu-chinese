@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -37,6 +37,7 @@
 
       <div class="chips" id="examples" aria-label="Примеры"></div>
       <div class="suggest" id="suggest" hidden></div>
+      <p class="search-note">Слова вне словаря переводятся внешним сервисом. Не вводите личные данные.</p>
     </section>
 
     <section class="result" id="result" aria-live="polite" hidden></section>
@@ -59,7 +60,8 @@
   </main>
 
   <footer class="footer">
-    Онлайн-перевод слов вне словаря: MyMemory · Анимация: Hanzi Writer
+    Онлайн-перевод слов вне словаря: MyMemory · Анимация: Hanzi Writer<br>
+    <a href="privacy.html">Политика конфиденциальности</a>
   </footer>
 
   <!-- integrity: браузер проверит, что файл с CDN не подменён -->
